@@ -10,7 +10,7 @@ const handleError = require('./controllers/handleError');
 
 // app.use(cors())
 
-const dbProd = "mongodb://mongo_anonymatedb:27017";
+const dbProd = "mongodb://mongo_anonymatedb:27017/anonymatedb";
 const dbLocal = "mongodb://localhost/Anonymate";
 var dbase;
 
@@ -32,7 +32,8 @@ mongoose.connect(
     if (!err) {
       console.log('We are connected');
     } else {
-      console.log('Trouble connecting');
+      console.log('Trouble connecting db');
+      console.log(err)
     }
   });
 
