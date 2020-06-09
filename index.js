@@ -8,7 +8,7 @@ const port = 3000;
 const handleError = require('./controllers/handleError');
 
 
-app.use(cors())
+// app.use(cors())
 
 const dbProd = "mongo_anonymatedb:27017";
 const dbLocal = "mongodb://localhost/Anonymate";
