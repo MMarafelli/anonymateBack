@@ -28,8 +28,15 @@ mongoose.connect(
   {
     useNewUrlParser: true,
     useCreateIndex: true
+  }, function (err, db) {
+    if (!err) {
+      console.log('We are connected');
+    } else {
+      console.log('Trouble connecting');
+    }
   });
- 
+
+
 // Carrega o model de Usuário
 require("./models/user");
 require("./models/conversation");
