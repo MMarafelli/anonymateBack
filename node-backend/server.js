@@ -10,9 +10,21 @@ const handleError = require('./controllers/handleError');
 
 app.use(cors())
 
+const dbProd = "mongo_anonymatedb:27017";
+const dbLocal = "mongodb://localhost/Anonymate";
+var dbase;
+
+if (process.env.AMBIENTE == "producao") {
+  dbase = dbProd;
+  console.log("db de prod")
+} else {
+  dbase = dbLocal;
+  console.log("db local")
+}
+
 // Conecta no MongoDB
 mongoose.connect(
-  "mongodb://localhost/Anonymate",
+  dbase,
   {
     useNewUrlParser: true,
     useCreateIndex: true
