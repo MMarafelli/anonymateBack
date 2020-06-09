@@ -29,7 +29,7 @@ mongoose.connect(
     useNewUrlParser: true,
     useCreateIndex: true
   });
-
+ 
 // Carrega o model de Usuário
 require("./models/user");
 require("./models/conversation");
