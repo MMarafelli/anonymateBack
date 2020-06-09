@@ -10,7 +10,7 @@ const handleError = require('./controllers/handleError');
 
 // app.use(cors())
 
-const dbProd = "mongo_anonymatedb:27017";
+const dbProd = "mongodb://mongo_anonymatedb:27017";
 const dbLocal = "mongodb://localhost/Anonymate";
 var dbase;
 
