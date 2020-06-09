@@ -122,7 +122,7 @@ async function getLastMessages(newUserId) {
   const query = {
     $or: [{ "members.member1": newUserId }, { "members.member2": newUserId }]
   };
-
+  console.log(query)
   const response = await Conversation.find(query, { messages: { $slice: -1 } }).sort({ "messages.messageAddAt": -1 }).exec();
   console.log('response: ' + response)
 
