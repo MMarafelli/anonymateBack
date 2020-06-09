@@ -40,8 +40,8 @@ const Conversation2 = {
   }]
 }
 
-// Conversation.create(Conversation1)
-// Conversation.create(Conversation2)
+Conversation.create(Conversation1)
+Conversation.create(Conversation2)
 
 function setUsersToOffLine(ids) {
   console.log('setUsersToOffLine')
