@@ -148,6 +148,24 @@ router.get("/me", async (req, res) => {
   }
 });
 
+router.use(authMiddleware);
+router.post("/interests", async (req, res) => {
+  console.log(req.body)
+  try {
+    const user = await User.findOne({ _id: req.body.userId })
+
+    user.interests = req.body.interestsList
+    user.languageSponkenList = req.body.languageSponkenList
+
+    await user.save();
+
+    return res.json({ status: 200 })
+  } catch {
+    return res.status(400).json({ error: "Can't update interests" });
+  }
+
+})
+
 router.post("/getContacts", async (req, res) => {
   // console.log('entrou pega contatos')
   const { userId } = req;

@@ -54,8 +54,8 @@ app.use("/api", require('./controllers/conversationController'));
 const io = require('socket.io')(server);
 
 io.on('connection', socket => {
-  console.log('connection')
-  console.log(socket)
+  // console.log('connection')
+  // console.log(socket)
 
   //---------------------------------------------------------------------------------
   // Set to offline users that doesnt online anymore
@@ -66,8 +66,8 @@ io.on('connection', socket => {
   //---------------------------------------------------------------------------------
   // ONLINE
   socket.on('online', newUserId => {
-    console.log('socket online')
-    console.log(newUserId)
+    // console.log('socket online')
+    // console.log(newUserId)
     function afterGetAllDatas([user, contacts, chating]) {
       socket.user = user;
       //=> EMIT: online
@@ -93,17 +93,17 @@ io.on('connection', socket => {
   //---------------------------------------------------------------------------------
   // OFFLINE
   socket.on('forceDisconnect', () => {
-    console.log('------------xxxxxx-----------')
-    console.log('disconnect')
-    console.log(socket)
+    // console.log('------------xxxxxx-----------')
+    // console.log('disconnect')
+    // console.log(socket)
 
     if (typeof socket.user === "undefined") {
       return false;
     }
 
     const userId = socket.user.userId;
-    console.log(userId)
-    console.log(socket.id)
+    // console.log(userId)
+    // console.log(socket.id)
     store.getUserAndUpdate(userId, { id: '', online: false })
       .then(user => {
         //=> EMIT:userOffline
@@ -111,7 +111,7 @@ io.on('connection', socket => {
       })
       .catch(handleError);
     socket.disconnect();
-    console.log('------------xxxxxx-----------')
+    // console.log('------------xxxxxx-----------')
   });
 
   socket.on('disconnect', () => {
@@ -134,7 +134,7 @@ io.on('connection', socket => {
 
   // change the currentUser
   socket.on('openChat', (contactId, conversationId) => {
-    console.log('openChat')
+    // console.log('openChat')
     const sender = socket.user.userId;
     const receiver = contactId;
     // console.log(sender)
@@ -160,7 +160,7 @@ io.on('connection', socket => {
   });
 
   socket.on('sendMessage', (receiver, message, conversationId) => {
-    console.log('sendMessage')
+    // console.log('sendMessage')
     const sender = socket.user.userId;
     //console.log('socket :')
     //console.log(socket.id)
@@ -178,7 +178,7 @@ io.on('connection', socket => {
       store.addMessage(chatMessage).then(objMessage => {
         //=> EMIT:receiveMessage
         // socket.emit('receiveMessage', objMessage);
-        console.log('receiverUser')
+        // console.log('receiverUser')
         socket.broadcast.to(receiverUser.chatId).emit('receiveMessage', objMessage);
         if (!isChatingWithReceiver) {
           store.addUserNotifications(sender, receiver)
@@ -193,10 +193,10 @@ io.on('connection', socket => {
   });
 
   socket.on('userTyping', receiver => {
-    console.log('userTyping')
+    // console.log('userTyping')
     const sender = socket.user.userId;
-    console.log(sender)
-    console.log(receiver)
+    // console.log(sender)
+    // console.log(receiver)
     store.getUser(receiver)
       .then(receiverUser => {
         const isChatingWithReceiver = receiverUser.currentUserChat === sender;

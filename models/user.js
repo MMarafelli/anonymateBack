@@ -29,6 +29,8 @@ const UserSchema = new mongoose.Schema({
     type: String, default: '',
     trim: true
   },
+  interests: [],
+  languageSponkenList: [],
   online: {
     type: Boolean,
     default: false
