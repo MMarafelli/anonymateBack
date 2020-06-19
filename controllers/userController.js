@@ -94,6 +94,7 @@ router.post("/register", async (req, res) => {
 
 router.post("/authenticate", async (req, res) => {
   try {
+    console.log(req.body)
     const { email, password, lastLogin } = req.body;
 
     console.log(email)
@@ -149,19 +150,40 @@ router.get("/me", async (req, res) => {
 });
 
 router.use(authMiddleware);
-router.post("/interests", async (req, res) => {
-  console.log(req.body)
-  try {
-    const user = await User.findOne({ _id: req.body.userId })
+router.post("/interestsUpdate", async (req, res) => {
 
-    user.interests = req.body.interestsList
-    user.languageSponkenList = req.body.languageSponkenList
+  const { userId, interests, languageSponkenList } = req.body
+
+  // console.log(userId)
+  // console.log(interests)
+  // console.log(languageSponkenList)
+
+  try {
+    const user = await User.findById(userId);
+    user.interests = interests
+    user.languageSponkenList = languageSponkenList
 
     await user.save();
 
     return res.json({ status: 200 })
   } catch {
     return res.status(400).json({ error: "Can't update interests" });
+  }
+
+})
+
+
+router.use(authMiddleware);
+router.post("/interests", async (req, res) => {
+  console.log(req.body)
+  try {
+    const user = await User.findOne({ _id: req.body.userId })
+    return res.json({
+      interests: user.interests,
+      languageSponkenList: user.languageSponkenList,
+    });
+  } catch {
+    return res.status(400).json({ error: "Can't get interests" });
   }
 
 })
