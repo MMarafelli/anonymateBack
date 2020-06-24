@@ -187,6 +187,7 @@ io.on('connection', socket => {
               socket.broadcast.to(receiverUser.id).emit('notSeenMessage', user.notifications);
             }).catch(handleError);
         }
+        socket.broadcast.to(receiverUser.chatId).emit('refreshLastMessage', objMessage)
         socket.emit('refreshLastMessage', objMessage)
       }).catch(handleError);
     }).catch(handleError);

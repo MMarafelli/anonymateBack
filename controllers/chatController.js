@@ -90,8 +90,8 @@ function getUsers() {
 }
 
 async function getContats(newUserId) {
-  console.log('getContats')
-  console.log(newUserId)
+  // console.log('getContats')
+  // console.log(newUserId)
   const query = {
     _id: newUserId
   };
@@ -106,25 +106,25 @@ async function getContats(newUserId) {
 }
 
 async function getMessages(conversationId) {
-  console.log('getMessages')
-  console.log('conversationId ' + conversationId)
+  // console.log('getMessages')
+  // console.log('conversationId ' + conversationId)
 
   const response = await Conversation.find({ _id: conversationId }).sort({ "messages.messageAddAt": -1 }).exec();
 
-  console.log(response)
+  // console.log(response)
 
   return response
 }
 
 async function getLastMessages(newUserId) {
   console.log('getLastMessages')
-  console.log('newUserId: ' + newUserId)
+  // console.log('newUserId: ' + newUserId)
   const query = {
     $or: [{ "members.member1": newUserId }, { "members.member2": newUserId }]
   };
-  console.log(query)
+  // console.log(query)
   const response = await Conversation.find(query, { messages: { $slice: -1 } }).sort({ "messages.messageAddAt": -1 }).exec();
-  console.log('response: ' + response)
+  // console.log('response: ' + response)
 
   return response
 }
@@ -177,7 +177,7 @@ async function addMessage(conversation) {
   )
   if (response.ok = 1) {
     const responseChat = await Conversation.find({ _id: conversation.conversationId }, { messages: { $slice: -1 } }).sort({ "messages.messageAddAt": -1 }).exec();
-    console.log('responseChat: ' + responseChat)
+    // console.log('responseChat: ' + responseChat)
     return responseChat;
   } else {
     return response
