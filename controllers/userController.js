@@ -93,6 +93,9 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/authenticate", async (req, res) => {
+  console.log("tentativa de login")
+  console.log(req)
+
   try {
     console.log(req.body)
     const { email, password, lastLogin } = req.body;
@@ -114,6 +117,10 @@ router.post("/authenticate", async (req, res) => {
     user.lastLogin = lastLogin;
 
     await user.save();
+
+    console.log(req)
+    console.log("tentativa de login fim")
+
 
     return res.json({
       userId: user._id,
