@@ -97,7 +97,7 @@ io.on('connection', socket => {
     // console.log('disconnect')
     // console.log(socket)
 
-    if (typeof socket.user === "undefined") {
+    if (typeof socket.user === "undefined" || typeof socket.user.userId === "undefined") {
       return false;
     }
 
@@ -115,7 +115,7 @@ io.on('connection', socket => {
   });
 
   socket.on('disconnect', () => {
-    if (typeof socket.user === "undefined") {
+    if (typeof socket.user === "undefined" || typeof socket.user.userId === "undefined") {
       return false;
     }
     const userId = socket.user.userId;
@@ -134,7 +134,12 @@ io.on('connection', socket => {
 
   // change the currentUser
   socket.on('openChat', (contactId, conversationId) => {
-    // console.log('openChat')
+    console.log('openChat')
+
+    if (typeof socket.user === "undefined" || typeof socket.user.userId === "undefined" ||  typeof contactId === "undefined" || typeof conversationId === "undefined") {
+      return false;
+    }
+
     const sender = socket.user.userId;
     const receiver = contactId;
     // console.log(sender)
@@ -160,7 +165,12 @@ io.on('connection', socket => {
   });
 
   socket.on('sendMessage', (receiver, message, conversationId) => {
-    // console.log('sendMessage')
+
+    if (typeof socket.user === "undefined" || typeof socket.user.userId === "undefined" || typeof receiver === "undefined" || typeof message === "undefined" || typeof conversationId === "undefined") {
+      return false;
+    }
+
+    console.log('sendMessage')
     const sender = socket.user.userId;
     //console.log('socket :')
     //console.log(socket.id)
@@ -194,7 +204,12 @@ io.on('connection', socket => {
   });
 
   socket.on('userTyping', receiver => {
-    // console.log('userTyping')
+    console.log('userTyping')
+
+    if (typeof socket.user === "undefined" || socket.user.userId === "undefined" || typeof receiver === "undefined") {
+      return false;
+    }
+
     const sender = socket.user.userId;
     // console.log(sender)
     // console.log(receiver)
