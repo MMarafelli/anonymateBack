@@ -68,10 +68,19 @@ io.on('connection', socket => {
   socket.on('online', newUserId => {
     // console.log('socket online')
     // console.log(newUserId)
+    // console.log(socket.id)
+
+    if (typeof newUserId === "undefined" || typeof socket.id === "undefined") {
+      return false;
+    }
+
+    // console.log('online ok')
+
     function afterGetAllDatas([user, contacts, chating]) {
+      // console.log('afterGetAllDatas')
       socket.user = user;
       //=> EMIT: online
-      // console.log([user, contacts, chating])
+      // console.log(user, contacts, chating)
       socket.emit('online', {
         user,
         contacts,
@@ -132,11 +141,65 @@ io.on('connection', socket => {
   //---------------------------------------------------------------------------------
   // HANDLE MESSAGES
 
+  // create first message
+  socket.on('createConversation', (conversation) => {
+    // console.log('createConversation')
+
+    if (typeof socket.user === "undefined" || typeof socket.user.userId === "undefined") {
+      return false;
+    }
+
+    store.createConversation(socket.user.userId, conversation).then(newCreatedMessage => {
+      socket.emit('newCreatedMessageListener', newCreatedMessage)
+    }).catch(handleError);
+  })
+
+  //get not delivered messages
+  socket.on('getNotDeliveredMessages', () => {
+    // console.log('bateu no get not delivered messages')
+    // console.log(socket.user)
+    // console.log(socket.user.userId)
+    if (typeof socket.user === "undefined" || typeof socket.user.userId === "undefined") {
+      return false;
+    }
+    // console.log('bateu no get not delivered messages ok ')
+    store.getLastMessagesNotDelivered(socket.user.userId).then(lastMessages => {
+      socket.emit('getNotDeliveredMessagesListener', lastMessages)
+    }).catch(handleError);
+
+  })
+
+  //get last messages
+  socket.on('getLastMessages', newUserId => {
+    // console.log(socket)
+    if (typeof socket.user === "undefined" || typeof socket.user.userId === "undefined") {
+      return false;
+    }
+    // console.log(newUserId)
+    function afterGetAllDatas([user, contacts, chating]) {
+      socket.user = user;
+      //=> EMIT: online
+      // console.log([user, contacts, chating])
+      socket.emit('getLastMessagesListener', {
+        user,
+        contacts,
+        chating,
+      });
+    }
+    Promise.all([
+      store.getUser(newUserId),
+      store.getContats(newUserId),
+      store.getLastMessages(newUserId),
+    ])
+      .then(afterGetAllDatas)
+      .catch(handleError);
+  })
+
   // change the currentUser
   socket.on('openChat', (contactId, conversationId) => {
-    console.log('openChat')
+    // console.log('openChat')
 
-    if (typeof socket.user === "undefined" || typeof socket.user.userId === "undefined" ||  typeof contactId === "undefined" || typeof conversationId === "undefined") {
+    if (typeof socket.user === "undefined" || typeof socket.user.userId === "undefined" || typeof contactId === "undefined" || typeof conversationId === "undefined") {
       return false;
     }
 
@@ -170,7 +233,7 @@ io.on('connection', socket => {
       return false;
     }
 
-    console.log('sendMessage')
+    // console.log('sendMessage')
     const sender = socket.user.userId;
     //console.log('socket :')
     //console.log(socket.id)
@@ -204,7 +267,7 @@ io.on('connection', socket => {
   });
 
   socket.on('userTyping', receiver => {
-    console.log('userTyping')
+    // console.log('userTyping')
 
     if (typeof socket.user === "undefined" || socket.user.userId === "undefined" || typeof receiver === "undefined") {
       return false;

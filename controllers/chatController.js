@@ -81,7 +81,12 @@ async function getUser(userId) {
   const response = await User.findOne({ _id: userId }).lean().exec();
   // console.log(response)
   //console.log('---------f------------')
-  return response
+  return ({
+    userId: response._id,
+    name: response.name,
+    username: response.username,
+    contacts: response.contacts
+  })
 
 }
 
@@ -116,11 +121,38 @@ async function getMessages(conversationId) {
   return response
 }
 
+async function getLastMessagesNotDelivered(userId) {
+  console.log('getLastMessagesNotDelivered')
+  // console.log('userId: ' + userId)
+  const query = {
+    $and: [
+      {
+        $or: [{ "members.member1": userId }, { "members.member2": userId }]
+      },
+      {
+        delivered: false
+      }
+    ]
+  };
+  // console.log(query)
+  const response = await Conversation.find(query, { messages: { $slice: -1 } }).sort({ "messages.messageAddAt": -1 }).exec();
+  // console.log('response: ' + response)
+
+  return response
+}
+
 async function getLastMessages(newUserId) {
   console.log('getLastMessages')
   // console.log('newUserId: ' + newUserId)
   const query = {
-    $or: [{ "members.member1": newUserId }, { "members.member2": newUserId }]
+    $and: [
+      {
+        $or: [{ "members.member1": newUserId }, { "members.member2": newUserId }]
+      },
+      {
+        delivered: true
+      }
+    ]
   };
   // console.log(query)
   const response = await Conversation.find(query, { messages: { $slice: -1 } }).sort({ "messages.messageAddAt": -1 }).exec();
@@ -155,6 +187,27 @@ function setMessagesToSeen(sender, receiver) {
     {
       multi: true
     }).exec();
+}
+
+async function createConversation(userId, conversation) {
+  console.log('createConversation')
+  // console.log(userId)
+  // console.log(conversation)
+
+  newConversation = {
+    members: [{
+      member1: userId,
+    }],
+    messages: [{
+      sender: userId,
+      message: conversation
+    }]
+  }
+
+  const response = await Conversation.create(newConversation)
+  // console.log(response)
+  return response
+
 }
 
 async function addMessage(conversation) {
@@ -223,4 +276,6 @@ module.exports = {
   setUserNotificationsToSeen,
   addMessage,
   addUserNotifications,
+  createConversation,
+  getLastMessagesNotDelivered,
 };

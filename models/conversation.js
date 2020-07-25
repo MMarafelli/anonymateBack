@@ -11,6 +11,10 @@ const ConversationSchema = new mongoose.Schema({
             trim: true
         }
     }],
+    delivered: {
+        type: Boolean,
+        default: false,
+    },
     messages: [{
         sender: {
             type: String, default: '',
