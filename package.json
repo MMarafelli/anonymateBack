@@ -7,6 +7,9 @@
     "prestart": "npm install",
     "start": "node index.js"
   },
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/MMarafelli/anonymateBack",
   "keywords": [],
   "author": "",
   "license": "ISC",
