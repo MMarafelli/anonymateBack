@@ -57,7 +57,7 @@ function setUsersToOffLine(ids) {
 
 async function getUserAndUpdate(newUserId, fields) {
   console.log('getUserAndUpdate')
-  // console.log(newUserId, fields)
+  console.log(newUserId, fields)
   const response = await User.findOne({ _id: newUserId })
     .then(user => {
       Object.keys(fields).forEach(key => {
