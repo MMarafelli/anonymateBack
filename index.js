@@ -27,6 +27,7 @@ mongoose.connect(
   dbase,
   {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
     useCreateIndex: true
   }, function (err, db) {
     if (!err) {
